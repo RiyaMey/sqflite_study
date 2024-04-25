@@ -16,7 +16,6 @@ class DBprovider {
       return _database;
     }
 
-
   Future<Database> initDB() async {
       return await openDatabase(
         join(await getDatabasesPath(), 'words_database.db'),
@@ -56,6 +55,19 @@ class DBprovider {
 
   Future<void> deleteAllWords() async {
     final db = await database;
+
     db.rawDelete('Delete from Words');
+  }
+
+  Future<void> deleteWord(int id) async {
+    final db = await database;
+
+    db.delete('Words', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> updateWord(Word word) async {
+    final db = await database;
+
+    db.update('Words', word.toMap(), where: 'id = ?', whereArgs: [word.id]);
   }
 }
